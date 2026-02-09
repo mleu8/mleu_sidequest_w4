@@ -6,13 +6,15 @@ GBDA302 Week 4 Example 4: layable Maze (JSON + Level class + Player class)
 
 ## Authors
 
-Karen Cochrane and David Han
+Mackenzie Leu
 
 ---
 
 ## Description
 
 Based on example 3, creates and positions the player using preloads and loadJSON files.
+
+A maze style game that requires you to collect a key and find the exit (3 levels)
 
 ---
 
@@ -41,5 +43,7 @@ N/A
 ## GenAI
 
 The code was written by Dr. Karen Cochrane and David Han but they used GenAI to write the comments.
+
+GenAI was used to write the code (Mackenzie Leu)
 
 ---

@@ -122,7 +122,7 @@ function setup() {
 }
 
 function draw() {
-  if (gameState === 'win') {
+  if (gameState === "win") {
     drawWin();
     return;
   }
@@ -456,23 +456,23 @@ function nextLevel() {
 }
 
 function showWin() {
-  gameState = 'win';
+  gameState = "win";
   // hide game buttons
   startBtn.hide();
   instrBtn.hide();
   // show back/menu button so player can return
   backBtn.show();
-  backBtn.html('Home');
+  backBtn.html("Home");
   backBtn.position((width - backBtn.size().width) / 2, height - 50);
-  
+
   // Add hover effect to Home button
   backBtn.mouseOver(() => {
-    backBtn.style('background-color', '#ecd3a3');
-    backBtn.style('transform', 'scale(1.05)');
+    backBtn.style("background-color", "#ecd3a3");
+    backBtn.style("transform", "scale(1.05)");
   });
   backBtn.mouseOut(() => {
-    backBtn.style('background-color', '#f3e2c7');
-    backBtn.style('transform', 'scale(1)');
+    backBtn.style("background-color", "#f3e2c7");
+    backBtn.style("transform", "scale(1)");
   });
 }
 
@@ -502,18 +502,28 @@ function drawWin() {
     [1.0, 0.85, 1.1],
     [1.15, 1.05, 0.9],
     [0.95, 1.0, 1.2],
-    [1.05, 0.95, 0.88]
+    [1.05, 0.95, 0.88],
   ];
   fill(255, 255, 255, 160);
   for (let i = 0; i < 7; i++) {
     const baseX = cloudSeeds[i] * (width / 6.5);
-    const cx = (baseX + cloudOffset + i * 120) % (width + 300) - 150;
+    const cx = ((baseX + cloudOffset + i * 120) % (width + 300)) - 150;
     const cy = height * cloudHeights[i];
     const s = cloudSizes[i];
     const shape = cloudShapes[i];
     ellipse(cx, cy, 140 * s * shape[0], 70 * s * shape[0]);
-    ellipse(cx + 40 * s * shape[1], cy + 6 * s, 110 * s * shape[1], 60 * s * shape[1]);
-    ellipse(cx - 40 * s * shape[2], cy + 6 * s, 110 * s * shape[2], 60 * s * shape[2]);
+    ellipse(
+      cx + 40 * s * shape[1],
+      cy + 6 * s,
+      110 * s * shape[1],
+      60 * s * shape[1],
+    );
+    ellipse(
+      cx - 40 * s * shape[2],
+      cy + 6 * s,
+      110 * s * shape[2],
+      60 * s * shape[2],
+    );
   }
 
   // ground
@@ -564,7 +574,7 @@ function drawWin() {
     const centerX = wx + winW / 2;
     const archTop = wy;
     const archBase = wy + archRadius;
-    
+
     // window frame (no stroke, consistent fill)
     noStroke();
     fill(80, 100, 130, 220);
@@ -572,7 +582,7 @@ function drawWin() {
     rect(wx, archBase, winW, winH - archRadius);
     // semicircular arch top with same fill
     arc(centerX, archBase, winW, archRadius * 2, PI, 0, CHORD);
-    
+
     // subtle glass reflection
     fill(200, 230, 255, 50);
     rect(wx + 6, archBase + 6, winW - 12, winH - archRadius - 12, 3);
@@ -607,7 +617,7 @@ function drawWin() {
   // steps
   fill(180);
   rect(bx + bw * 0.16, by + bh - 10, bw * 0.68, 12, 4);
-  rect(bx + bw * 0.20, by + bh + 6, bw * 0.60, 8, 4);
+  rect(bx + bw * 0.2, by + bh + 6, bw * 0.6, 8, 4);
 
   // sign above door
   fill(120, 40, 40);
@@ -615,7 +625,7 @@ function drawWin() {
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(20);
-  text('LIBRARY', bx + bw / 2, by + 32);
+  text("LIBRARY", bx + bw / 2, by + 32);
 
   // celebratory banner below library on the ground
   const bannerY = by + bh + 60;
@@ -624,12 +634,12 @@ function drawWin() {
   fill(40);
   textAlign(CENTER, CENTER);
   textSize(28);
-  text('Congrats! You escaped!', width / 2, bannerY);
+  text("Congrats! You escaped!", width / 2, bannerY);
 
   // small subtext
   textSize(16);
   fill(60);
-  text('Thanks for playing.', width / 2, bannerY + 32);
+  text("Thanks for playing.", width / 2, bannerY + 32);
 }
 
 // ----- Utility -----
@@ -669,7 +679,12 @@ function generateSolvableLevel(rows, cols, wallProb = 0.28, maxAttempts = 200) {
 
   function neighbors(r, c) {
     const out = [];
-    const steps = [ [1,0],[-1,0],[0,1],[0,-1] ];
+    const steps = [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+    ];
     for (const [dr, dc] of steps) {
       const nr = r + dr;
       const nc = c + dc;
@@ -722,13 +737,16 @@ function generateSolvableLevel(rows, cols, wallProb = 0.28, maxAttempts = 200) {
 
     // pick key and goal locations on floor cells
     const floorCells = [];
-    for (let r = 1; r < rows - 1; r++) for (let c = 1; c < cols - 1; c++) if (g[r][c] === 0) floorCells.push([r, c]);
+    for (let r = 1; r < rows - 1; r++)
+      for (let c = 1; c < cols - 1; c++)
+        if (g[r][c] === 0) floorCells.push([r, c]);
     if (floorCells.length < 3) continue;
 
     // helper to choose a random floor cell that is not equal to some others
     function chooseRandom(exclude = []) {
       const pick = floorCells[Math.floor(Math.random() * floorCells.length)];
-      for (const e of exclude) if (pick[0] === e[0] && pick[1] === e[1]) return chooseRandom(exclude);
+      for (const e of exclude)
+        if (pick[0] === e[0] && pick[1] === e[1]) return chooseRandom(exclude);
       return pick;
     }
 
@@ -749,13 +767,13 @@ function generateSolvableLevel(rows, cols, wallProb = 0.28, maxAttempts = 200) {
 
   // fallback simple level if generator fails after maxAttempts
   const fallback = [
-    [1,1,1,1,1,1,1,1,1,1],
-    [1,2,0,0,0,1,0,0,0,1],
-    [1,0,1,0,0,1,0,1,0,1],
-    [1,0,1,0,4,0,0,1,0,1],
-    [1,0,0,0,1,1,0,1,0,1],
-    [1,0,0,0,0,0,0,0,3,1],
-    [1,1,1,1,1,1,1,1,1,1]
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 2, 0, 0, 0, 1, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 4, 0, 0, 1, 0, 1],
+    [1, 0, 0, 0, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 3, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ];
   return fallback;
 }
